@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import { SearchRequestFilter } from '../types'
+import { SearchRequestFilter } from '../shared/api/types/SearchRequest/SearchRequestFilter'
 
 interface FilterState {
 	globalFilters: SearchRequestFilter
@@ -8,6 +8,6 @@ interface FilterState {
 }
 
 export const useFilterStore = create<FilterState>(set => ({
-	globalFilters: {},
+	globalFilters: [],
 	setGlobalFilters: filters => set({ globalFilters: filters })
 }))
