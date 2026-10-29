@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { FilterModal } from '../../../components/FilterModal'
+import { LanguageSwitcher } from '../../../components/LanguageSwitcher'
 import { FilterItem } from '../../../shared/api/types/Filter/FilterItem'
 import { useFilterStore } from '../../../store/useFilterStore'
 
-export const App = () => {
+export const App: React.FC = () => {
 	const { t } = useTranslation()
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -29,7 +30,9 @@ export const App = () => {
 	})
 
 	return (
-		<section className="w-full h-dvh flex flex-col items-center justify-center bg-white p-4 font-sans">
+		<section className="w-full h-dvh flex flex-col items-center justify-center bg-white p-4 font-sans relative">
+			<LanguageSwitcher />
+
 			<h1 className="text-6xl text-gray-600 mb-8 text-center font-light tracking-tight">
 				{t('main.app_title', 'WinWinTravel frontend test task')}
 			</h1>
@@ -63,7 +66,7 @@ export const App = () => {
 				</p>
 			)}
 
-			{isModalOpen && filterData && (
+			{isModalOpen && Array.isArray(filterData) && (
 				<FilterModal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
