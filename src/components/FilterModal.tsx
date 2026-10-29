@@ -13,15 +13,6 @@ import { ConfirmationDialog } from './ConfirmationDialog'
 
 type LocalFiltersMap = Record<string, string[]>
 
-type JsonFilterItem = FilterItem & {
-	title: string
-	options: Array<{
-		id: string
-		label: string
-		description?: string
-	}>
-}
-
 interface FilterModalProps {
 	isOpen: boolean
 	onClose: () => void
@@ -51,7 +42,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 			}
 			setLocalFilters(map)
 		}
-	}, [isOpen, initialFilters])
+	}, [isOpen])
 
 	const handleCheckboxChange = (
 		groupId: string,
@@ -93,7 +84,18 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 		return null
 	}
 
-	const typedFilterData = filterData as JsonFilterItem[]
+	const getGridClasses = (columns: number | string) => {
+		if (columns === 'flex') {
+			return 'flex flex-col sm:flex-row sm:items-center justify-between gap-y-4 gap-x-6'
+		}
+		if (columns === 2) {
+			return 'grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6'
+		}
+		if (columns === 1) {
+			return 'grid grid-cols-1 gap-y-4'
+		}
+		return 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6'
+	}
 
 	return (
 		<>
@@ -101,7 +103,6 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 				<div className="relative flex max-h-[85vh] w-full max-w-[1280px] flex-col rounded-2xl bg-white shadow-xl border border-gray-100 overflow-hidden">
 					<div className="p-6 bg-white overflow-y-auto flex-1 flex flex-col">
 						<header className="relative flex w-full items-center justify-center bg-white border-b-[2px] border-[#B4B4B4] pb-6 min-h-[64px] mb-8 shrink-0">
-							<div className="absolute left-0 top-1/2 -translate-y-1/2 z-50"></div>
 							<h2 className="text-center text-3xl md:text-4xl font-medium tracking-tight text-[#31393C] font-sans">
 								{t('title', 'Filter')}
 							</h2>
@@ -118,81 +119,53 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 						</header>
 
 						<div className="flex-1">
-							{Array.isArray(typedFilterData) &&
-								typedFilterData.map(group => {
-									const titleLower = (group.title || '').toLowerCase()
-									const isTwoColumns =
-										titleLower.includes('cancellation') ||
-										titleLower.includes('prepayment') ||
-										titleLower.includes('payment')
+							{filterData.map(group => {
+								const itemsList = group.options || []
 
-									const isFlexRow = titleLower.includes('special offers')
-									const itemsList = group.options || []
+								return (
+									<section
+										key={group.id}
+										className="border-b-[2px] border-[#B4B4B4] pb-8 last:border-0 last:pb-0 mb-8"
+									>
+										<h3 className="text-2xl font-medium leading-[29px] text-[#31393C] font-sans mb-4">
+											{t(`groups.${group.id}`, group.title)}
+										</h3>
 
-									return (
-										<section
-											key={group.id}
-											className="border-b-[2px] border-[#B4B4B4] pb-8 last:border-0 last:pb-0 mb-8"
-										>
-											<h3 className="text-2xl font-medium leading-[29px] text-[#31393C] font-sans mb-4">
-												{t(`groups.${group.id}`, group.title)}
-											</h3>
+										<div className={getGridClasses(group.columns)}>
+											{itemsList.map(option => {
+												const isChecked =
+													localFilters[group.id]?.includes(option.id) || false
 
-											<div
-												className={
-													isFlexRow
-														? 'flex flex-col sm:flex-row sm:items-center justify-between gap-y-4 gap-x-6'
-														: titleLower.includes('form of payment')
-															? 'grid grid-cols-1 gap-y-4'
-															: isTwoColumns
-																? 'grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6'
-																: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6'
-												}
-											>
-												{itemsList.map(option => {
-													const currentOption = option as unknown as {
-														id: string
-														label: string
-														description?: string
-													}
-													const isChecked =
-														localFilters[group.id]?.includes(
-															currentOption.id
-														) || false
+												return (
+													<label
+														key={option.id}
+														className="flex min-h-[24px] items-start space-x-4 cursor-pointer group select-none"
+													>
+														<div className="relative w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
+															<input
+																type="checkbox"
+																checked={isChecked}
+																onChange={e =>
+																	handleCheckboxChange(
+																		group.id,
+																		option.id,
+																		e.target.checked
+																	)
+																}
+																className="w-5 h-5 bg-white border-[2px] border-[#31393C] rounded text-orange-500 focus:ring-orange-500 accent-orange-500 cursor-pointer transition-colors shrink-0"
+															/>
+														</div>
 
-													return (
-														<label
-															key={currentOption.id}
-															className="flex min-h-[24px] items-start space-x-4 cursor-pointer group select-none"
-														>
-															<div className="relative w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
-																<input
-																	type="checkbox"
-																	checked={isChecked}
-																	onChange={e =>
-																		handleCheckboxChange(
-																			group.id,
-																			currentOption.id,
-																			e.target.checked
-																		)
-																	}
-																	className="w-5 h-5 bg-white border-[2px] border-[#31393C] rounded text-orange-500 focus:ring-orange-500 accent-orange-500 cursor-pointer transition-colors shrink-0"
-																/>
-															</div>
-
-															<span className="text-base font-normal leading-none text-[#31393C] transition-colors group-hover:text-black pt-0.5 break-words">
-																{t(
-																	`options.${currentOption.id}`,
-																	currentOption.label
-																)}
-															</span>
-														</label>
-													)
-												})}
-											</div>
-										</section>
-									)
-								})}
+														<span className="text-base font-normal leading-none text-[#31393C] transition-colors group-hover:text-black pt-0.5 break-words">
+															{t(`options.${option.id}`, option.label)}
+														</span>
+													</label>
+												)
+											})}
+										</div>
+									</section>
+								)
+							})}
 						</div>
 
 						<footer className="grid grid-cols-3 items-start px-6 pb-6 bg-white w-full border-t-[2px] border-[#B4B4B4] shrink-0 mt-12">

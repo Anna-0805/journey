@@ -1,5 +1,5 @@
 export interface FilterChooseOption {
 	id: string
-	name: string
+	label: string
 	description?: string
 }

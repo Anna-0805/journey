@@ -2,9 +2,13 @@
   "title": "Фільтр",
   "apply": "Застосувати",
   "clearAll": "Очистити всі параметри",
-   "Do you want to apply new filter": "Бажаєте застосувати новий фільтр?",
-  "Use old filter": "Залишити старий",
-  "Apply new filter": "Застосувати новий",
+  "dialog": {
+  "confirm_title": "Бажаєте застосувати новий фільтр?",
+  "buttons": {
+    "cancel": "Залишити старий",
+    "confirm": "Застосувати новий"
+  }
+},
   "groups": {
     "preliminary": "Попередній фільтр",
     "popular": "Популярні фільтри",

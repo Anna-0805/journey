@@ -20,10 +20,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 		>
 			<div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl border border-gray-100 text-center transform transition-all duration-300 scale-100">
 				<h3 className="text-base font-bold text-gray-900 mb-6">
-					{t(
-						'Do you want to apply new filter',
-						'Do you want to apply new filter'
-					)}
+					{t('dialog.confirm_title', 'Do you want to apply new filter')}
 				</h3>
 
 				<div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -31,13 +28,13 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 						onClick={onCancel}
 						className="w-full sm:w-auto border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-4 py-2 rounded-lg transition-colors text-sm"
 					>
-						{t('Use old filter', 'Use old filter')}
+						{t('dialog.buttons.cancel', 'Use old filter')}
 					</button>
 					<button
 						onClick={onConfirm}
 						className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-lg transition-colors shadow-sm text-sm"
 					>
-						{t('Apply new filter', 'Apply new filter')}
+						{t('dialog.buttons.confirm', 'Apply new filter')}
 					</button>
 				</div>
 			</div>
