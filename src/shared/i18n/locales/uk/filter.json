@@ -1,7 +1,17 @@
 {
+	"main": {
+		"app_title": "WinWinTravel тестове завдання для frontend",
+		"open_filters": "Відкрити фільтри",
+		"json_output": "Фільтр пошукового запиту (JSON-вивід):",
+		"loading": "Завантаження даних...",
+		"error": "Помилка завантаження filterData.json"
+	},
+
 	"title": "Фільтр",
 	"apply": "Застосувати",
 	"clearAll": "Очистити всі параметри",
+  "openFilters": "Відкрити фільтри",
+	"jsonOutputLabel": "Вихідні дані фільтра запиту (JSON-вивід):",
 	"dialog": {
 		"confirm_title": "Бажаєте застосувати новий фільтр?",
 		"buttons": {

@@ -159,7 +159,7 @@
 	{
 		"id": "special_offers",
 		"title": "Special offers and discounts",
-		"columns": "flex",
+		"columns": 3,
 		"options": [
 			{ "id": "discount_50", "label": "Discounts of 50%" },
 			{ "id": "hot_offers", "label": "Hot offers" },
